@@ -1,0 +1,25 @@
+{
+  "name": "webHomepage",
+  "version": "1.0.0",
+  "description": "Next.js를 이용한 캘린더와 채팅 웹",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "mock": "node mocks/server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "next": "latest",
+    "react": "latest",
+    "react-calendar": "^3.6.0",
+    "react-dom": "latest",
+    "react-intl": "^7.0.4",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1"
+  },
+  "devDependencies": {
+    "msw": "^0.47.4"
+  }
+}

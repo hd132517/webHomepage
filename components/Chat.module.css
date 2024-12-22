@@ -1,0 +1,92 @@
+.loginContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f9f9f9;
+}
+
+.input {
+  padding: 10px;
+  margin: 5px;
+  width: 80%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.userListContainer {
+  padding: 20px;
+}
+
+.userList {
+  list-style: none;
+  padding: 0;
+}
+
+.userItem {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #eaeaea;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+
+.chatHeader {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.messagesContainer {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.myMessage {
+  text-align: right;
+  background-color: #d1f7c4;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.theirMessage {
+  text-align: left;
+  background-color: #f1f1f1;
+  margin: 5px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.inputContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.fileInput {
+  display: none;
+}
