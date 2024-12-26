@@ -1,8 +1,6 @@
+// Chat.js 수정본
 import { useState, useEffect } from "react";
-import { io } from "socket.io-client";
 import styles from "./Chat.module.css";
-
-const socket = io("http://localhost:3001");
 
 export default function Chat() {
     const [currentUser, setCurrentUser] = useState("");
@@ -15,26 +13,25 @@ export default function Chat() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        socket.on("updateUsers", (connectedUsers) => {
-            setUsers(connectedUsers);
-        });
-
-        socket.on("receiveMessage", (data) => {
-            if (data.room === room) {
-                setMessages((prev) => [...prev, data]);
-            }
-        });
-
-        return () => {
-            socket.off("updateUsers");
-            socket.off("receiveMessage");
-        };
-    }, [room]);
+        fetch("/api/users")
+            .then((res) => res.json())
+            .then((data) => setUsers(data))
+            .catch((err) => console.error("[Error] fetching users:", err));
+    }, []);
 
     const joinChat = () => {
         if (currentUser.trim()) {
-            socket.emit("joinChat", currentUser);
-            setIsLoggedIn(true);
+            fetch("/api/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username: currentUser }),
+            })
+                .then((res) => res.json())
+                .then(() => {
+                    setIsLoggedIn(true);
+                    setUsers((prev) => [...prev, currentUser]);
+                })
+                .catch((err) => console.error("[Error] joining chat:", err));
         }
     };
 
@@ -42,16 +39,22 @@ export default function Chat() {
         const newRoom = `room_${[currentUser, user].sort().join("_")}`;
         setRoom(newRoom);
         setSelectedUser(user);
-        socket.emit("joinRoom", { sender: currentUser, receiver: user, room: newRoom });
-        setMessages([]); //초기화
+        fetch(`/api/messages?room=${newRoom}`)
+            .then((res) => res.json())
+            .then(setMessages);
     };
 
     const sendMessage = () => {
         if (message.trim() && room) {
             const data = { room, sender: currentUser, content: message, type: "text" };
-            socket.emit("sendMessage", data);
-            //setMessages((prev) => [...prev, data]);
-            setMessage("");
+            fetch("/api/messages", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            }).then(() => {
+                setMessages((prev) => [...prev, data]);
+                setMessage("");
+            });
         }
     };
 
@@ -66,11 +69,16 @@ export default function Chat() {
                     fileName: file.name,
                     type: "file",
                 };
-                socket.emit("sendMessage", data);
-                //setMessages((prev) => [...prev, data]);
+                fetch("/api/messages", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data),
+                }).then(() => {
+                    setMessages((prev) => [...prev, data]);
+                    setFile(null);
+                });
             };
             reader.readAsDataURL(file);
-            setFile(null);
         }
     };
 
@@ -97,12 +105,8 @@ export default function Chat() {
             <div className={styles.userListContainer}>
                 <h2>사용자 목록</h2>
                 <ul className={styles.userList}>
-                    {users.filter((user) => user !== currentUser).map((user) => (
-                        <li
-                            key={user}
-                            onClick={() => startChat(user)}
-                            className={styles.userItem}
-                        >
+                    {users.map((user, index) => (
+                        <li key={index} className={styles.userItem}>
                             {user}
                         </li>
                     ))}
