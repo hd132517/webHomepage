@@ -38,7 +38,7 @@
 
 ## 프로젝트 실행 방법
 
-### 1. 도커 설치
+### 1. 도커 설치 및 실행
 프로젝트 실행을 위해 Docker와 Docker Compose가 필요합니다.  
 [Docker 공식 사이트](https://www.docker.com/)에서 설치하세요.
 
